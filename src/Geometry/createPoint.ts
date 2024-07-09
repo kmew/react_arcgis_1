@@ -1,8 +1,3 @@
+import Point from "@arcgis/core/geometry/Point"
 
-interface IcreatePoint {
-
-}
-
-export default function createPoint(pointProperty: __esri.PointProperties) {
-
-}
+export const createPoint = (pointProperty: __esri.PointProperties) => new Point(pointProperty);
