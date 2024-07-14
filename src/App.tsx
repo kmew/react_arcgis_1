@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import { ArcGraphic, ArcGraphicsLayer, ArcMapView } from "./MapView";
 import ControlLayer from "./ControlLayer";
@@ -12,6 +12,9 @@ import { createPolygon } from "./Geometry/createPolygon";
 import { createSimpleFillSymbol } from "./Geometry/createSimpleFillSymbol";
 import { BASEMAP_OSM_VALUE } from "./value/basemap_osm_enum";
 import { BASEMAP_ARCGIS_VALUE } from "./value/basemap_arcgis_enum";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
 // import NavBar from 'src/components/NavBar'
 
 function App() {
@@ -42,9 +45,9 @@ function App() {
 
   const simpleLineSymbol = createSimpleLineSymbol({
     color: "blue",
-    cap: 'round',
-    join: 'round',
-    style: 'dash-dot',
+    cap: "round",
+    join: "round",
+    style: "dash-dot",
     width: 3,
   });
 
@@ -68,22 +71,42 @@ function App() {
 
   const simpleFillSymbol = createSimpleFillSymbol({
     color: "green",
-    style: 'diagonal-cross'
+    style: "diagonal-cross",
   });
 
   const PrintCoordinate = (e: __esri.ViewClickEvent) => {
-    const { latitude, longitude } = e.mapPoint
-    console.log(`lat: ${latitude} || long: ${longitude}`)
+    const { latitude, longitude } = e.mapPoint;
+    console.log(`lat: ${latitude} || long: ${longitude}`);
     const { x, y } = e;
-    console.log(`x: ${x} || y: ${y}`)
-    console.log('============')
+    console.log(`x: ${x} || y: ${y}`);
+    console.log("============");
+  };
 
-  }
+  const firebaseConfig = {
+    apiKey: "AIzaSyA26rGWNcfffBEmYbr-dUnMKD6sTkU4kQ0",
+
+    authDomain: "test-arcgis-react.firebaseapp.com",
+
+    projectId: "test-arcgis-react",
+
+    storageBucket: "test-arcgis-react.appspot.com",
+
+    messagingSenderId: "706180636154",
+
+    appId: "1:706180636154:web:419f0fb03fa38ec2ba5843",
+
+    measurementId: "G-FXJBBJQDXJ",
+  };
+
+  useEffect(() => {
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  });
 
   return (
     <div className="App">
       <ControlLayer />
-      <ArcMapView mapProperties={{basemap: BASEMAP_OSM_VALUE.HYBRID}} >
+      <ArcMapView mapProperties={{ basemap: BASEMAP_OSM_VALUE.HYBRID }}>
         <ArcGraphicsLayer>
           <ArcGraphic geometry={point} symbol={simpleMarkerSymbol} />
           <ArcGraphic geometry={polyline} symbol={simpleLineSymbol} />
